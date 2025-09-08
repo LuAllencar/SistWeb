@@ -43,7 +43,7 @@ public class CursoController {
         @GetMapping("/criar")
         public String criarForm(Model model) {
             model.addAttribute("curso", new Curso());
-            return "curso/formularioAluno";
+            return "curso/formularioCurso";
         }
 
 }

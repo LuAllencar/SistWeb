@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1 style="text-align: center;">Lista de Cursos</h1>
-    <h3 style="text-align: center;"><a href="/aluno/criar">Cadastrar</a></h3>
+    <h3 style="text-align: center;"><a href="/cursos/criar">Cadastrar</a></h3>
 
     <!-- Tabela para exibir os cursos cadastrados -->
     <table style="margin: 0 auto; border: 1px solid black; border-collapse: collapse;">
@@ -26,8 +26,8 @@
             <td th:text="${curso.idCurso}"></td>
             <td th:text="${curso.nomeCurso}"></td>
             <td th:text="${curso.siglaCurso}"></td>
-            <td th:text="${aluno.chCurso}"></td>
-            <td th:text="${aluno.periodoCurso}"></td>
+            <td th:text="${curso.chCurso}"></td>
+            <td th:text="${curso.periodoCurso}"></td>
             <td>
                 <a th:href="@{/cursos/editar{id}(id=${curso.idCurso})}">Editar</a>
                 <a th:href="@{/cursos/excluir{id}(id=${curso.idCurso})}">Excluir</a>
