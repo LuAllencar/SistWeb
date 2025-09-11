@@ -1,0 +1,23 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    justify-self: center;
+}
+
+body{
+    background-color: #f2f2f2;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: bold;
+    padding: 15px;
+}
+
+body h1{
+    border: black solid 3px;
+    padding: 20px;
+    border-radius: 3%;
+}
+
+.titulo{
+    max-width: fit-content;
+}
