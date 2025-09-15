@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,5 +46,22 @@ public class CursoController {
             model.addAttribute("curso", new Curso());
             return "curso/formularioCurso";
         }
+
+        // Método para excluir um curso
+    @GetMapping("/excluir/{id}")
+    public String excluir(@PathVariable("id") Integer id) {
+        cursoService.deleteById(id);
+        return "redirect:/cursos/listar";
+    }
+    
+    // Método par abrir o formulário de edição de cursos
+    @GetMapping("/editar/{id}")
+    public String editarForm(@PathVariable ("id") Integer id, Model model) {
+        Curso curso = cursoService.findById(id);
+        model.addAttribute("curso", curso);
+        return "curso/formularioCurso";
+    }
+
+
 
 }
