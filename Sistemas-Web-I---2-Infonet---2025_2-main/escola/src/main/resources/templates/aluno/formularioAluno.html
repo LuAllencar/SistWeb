@@ -27,6 +27,13 @@
         <label for="cpfAluno">CPF:</label>
         <input type="text" name="cpfAluno" th:field="*{cpfAluno}" />
         <br />
+        <label for="idCurso">Curso:</label>
+        <select th:field="*{curso}">
+            <option th:each="curso : ${cursos}"
+                    th:text="${curso.nomeCurso}"
+                    th:value="${curso.idCurso}" </option>
+        </select>
+    </br>
         <button type="submit">Salvar</button>
     </form>
 </body>
