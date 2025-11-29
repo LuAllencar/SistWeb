@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Alunos (corrigido)</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+    <style>
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cadastro de Alunos</h1>
+
+    <form th:action="@{/alunos/salvar}" th:object="${aluno}" method="post">
+        <!-- campos do aluno... (omiti para focar no JS/IBGE) -->
+
+        <label for="estados">Estado</label>
+        <select id="estados" disabled>
+            <option value="">Carregando estados...</option>
+        </select>
+
+        <label for="cidades">Cidade</label>
+        <select id="cidades" disabled>
+            <option value="">Selecione um estado primeiro</option>
+        </select>
+
+        <!-- Campos ocultos que serão enviados no formulário -->
+        <input type="hidden" name="cidade.idCidade" id="cidadeIdSelecionada" 
+               th:value="${aluno.cidade != null ? aluno.cidade.idCidade : ''}" />
+        <input type="hidden" name="cidade.nomeCidade" id="cidadeNomeSelecionada" 
+               th:value="${aluno.cidade != null ? aluno.cidade.nomeCidade : ''}" />
+
+        <button type="submit">Salvar</button>
+    </form>
+
+    <a href="/escola">Voltar</a>
+
+    <script th:inline="javascript">
+        const estadosSelect = document.getElementById('estados');
+        const cidadesSelect = document.getElementById('cidades');
+        const IBGE_BASE = 'https://servicodados.ibge.gov.br/api/v1/localidades';
+
+        // Pega os dados da cidade atual (quando está editando)
+        const cidadeAtual = {
+            id: /*[[${aluno.cidade != null ? aluno.cidade.idCidade : null}]]*/ null,
+            nome: /*[[${aluno.cidade != null ? aluno.cidade.nomeCidade : ''}]]*/ ''
+        };
+
+        // Carrega todos os estados do Brasil
+        async function carregarEstados() {
+            try {
+                const res = await fetch(`${IBGE_BASE}/estados?orderBy=nome`);
+                if (!res.ok) throw new Error('Erro ao buscar estados');
+                const dados = await res.json();
+
+                estadosSelect.innerHTML = '<option value="">Selecione um estado</option>';
+                dados.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.id;
+                    opt.textContent = s.nome;
+                    estadosSelect.appendChild(opt);
+                });
+
+                // Se está editando um aluno, busca o estado da cidade
+                if (cidadeAtual.id) {
+                    await buscarEstadoDaCidade(cidadeAtual.id);
+                }
+            } catch (err) {
+                estadosSelect.innerHTML = '<option value="">Erro ao carregar estados</option>';
+                console.error('Erro:', err);
+            }
+        }
+
+        // Busca qual é o estado de uma cidade específica
+        async function buscarEstadoDaCidade(cidadeId) {
+            try {
+                const res = await fetch(`${IBGE_BASE}/municipios/${cidadeId}`);
+                if (!res.ok) return;
+                const cidade = await res.json();
+
+                // O JSON do IBGE pode usar chaves com diferentes capitalizações em alguns níveis.
+                // Tornamos o acesso mais defensivo: tentamos as propriedades mais prováveis.
+                const mesor = cidade?.microrregiao?.mesorregiao || cidade?.microrregiao?.mesorregiao;
+                const ufObj = mesor?.UF || mesor?.uf || (cidade?.microrregiao?.mesorregiao && cidade.microrregiao.mesorregiao.UF) || null;
+
+                const estadoId = ufObj ? ufObj.id : null;
+                if (!estadoId) return;
+
+                estadosSelect.value = estadoId;
+
+                // Carrega as cidades desse estado
+                await carregarCidadesPorEstado(estadoId);
+
+                // Seleciona a cidade atual (após as options terem sido criadas)
+                cidadesSelect.value = cidadeId;
+
+                // Preenche os campos ocultos
+                document.getElementById('cidadeIdSelecionada').value = cidadeId;
+                // O campo "nome" do retorno do IBGE costuma ser 'nome' no objeto do município
+                document.getElementById('cidadeNomeSelecionada').value = cidade.nome || cidade.localidade || cidade.nomeCidade || cidadeAtual.nome;
+            } catch (err) {
+                console.error('Erro ao buscar estado da cidade:', err);
+            }
+        }
+
+        // Carrega as cidades por estado
+        async function carregarCidadesPorEstado(estadoId) {
+            try {
+                cidadesSelect.innerHTML = '<option value="">Carregando cidades...</option>';
+                cidadesSelect.disabled = true;
+
+                const res = await fetch(`${IBGE_BASE}/estados/${estadoId}/municipios`);
+                if (!res.ok) throw new Error('Erro ao buscar cidades');
+                const dados = await res.json();
+
+                cidadesSelect.innerHTML = '<option value="">Selecione uma cidade</option>';
+                dados.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.id;
+                    opt.textContent = m.nome;
+                    cidadesSelect.appendChild(opt);
+                });
+                cidadesSelect.disabled = false;
+            } catch (err) {
+                cidadesSelect.innerHTML = '<option value="">Erro ao carregar cidades</option>';
+                cidadesSelect.disabled = true;
+                console.error('Erro:', err);
+            }
+        }
+
+        // Quando o usuário seleciona um estado
+        estadosSelect.addEventListener('change', (e) => {
+            const estadoId = e.target.value; // CORREÇÃO: .value, não .val
+            if (!estadoId) {
+                cidadesSelect.innerHTML = '<option value="">Selecione um estado primeiro</option>';
+                cidadesSelect.disabled = true;
+                return;
+            }
+            carregarCidadesPorEstado(estadoId);
+        });
+
+        // Quando o usuário seleciona uma cidade
+        cidadesSelect.addEventListener('change', (e) => {
+            const cidadeId = e.target.value;
+            const cidadeNome = e.target.options[e.target.selectedIndex]?.text || '';
+
+            // Preenche os campos ocultos que serão enviados no formulário
+            document.getElementById('cidadeIdSelecionada').value = cidadeId;
+            document.getElementById('cidadeNomeSelecionada').value = cidadeNome;
+        });
+
+        // Inicia o carregamento quando a página carregar
+        carregarEstados();
+    </script>
+</body>
+</html>

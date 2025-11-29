@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <h1>Cadastro de Usuario</h1>
+    <form th:action="@{/usuarios/salvar}" method="post" th:object="${usuario}">
+      
+        <input type="hidden" name="idUsuario" th:field="*{idUsuario}" readonly />
+
+        <label for="nomeUsuario">Nome:</label>
+        <input type="text" name="nomeUsuario" th:field="*{nomeUsuario}"/>
+        <br />
+        <label for="emailUsuario">E-mail:</label>
+        <input type="email" name="emailUsuario" th:field="*{emailUsuario}" />
+        <br />
+        <label for="loginUsuario">Login:</label>
+        <input type="text" name="loginUsuario" th:field="*{loginUsuario}" />
+        <br />
+        <label for="senhaUsuario">Senha:</label>
+        <input type="password" name="senhaUsuario" th:field="*{senhaUsuario}" />
+        <br />
+       
+        <button type="submit">Salvar</button>
+    </form>
+    <a href="/escola">Voltar</a>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <h1 style="text-align: center;">Lista de Cidades</h1>
+    <h3 style="text-align: center;"><a href="/cidades/criar">Cadastrar</a></h3>
+
+    <!-- Tabela para exibir as cidades cadastrados -->
+    <table style="margin: 0 auto; border: 1px solid black; border-collapse: collapse;">
+        <tr>
+            <td colspan="8" style="text-align: center;">Lista de Cidades</td>
+        </tr>
+        <tr>
+            <th>#</th>
+            <th>Nome</th>
+            
+            <th colspan="2">Ações</th>
+        </tr>
+        <tr th:each="cidade : ${cidades}">
+            <td th:text="${cidade.idCidade}"></td>
+            <td th:text="${cidade.nomeCidade}"></td>
+            <td>
+                <a th:href="@{/cidades/editar/{id}(id=${cidade.idCidade})}">Editar</a>
+                <a th:href="@{/cidades/excluir/{id}(id=${cidade.idCidade})}">Excluir</a>
+            </td>
+        </tr>
+    </table>
+    <br></br>
+    <a href="/escola">Voltar</a>
+</body>
+</html>
