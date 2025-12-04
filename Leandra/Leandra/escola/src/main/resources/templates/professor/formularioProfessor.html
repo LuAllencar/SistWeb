@@ -1,61 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Alunos</title>
+    <title>Document</title>
     <link rel="stylesheet" href="/css/estilos.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 14px;
-            color: #333;
-        }
-        select:disabled {
-            background-color: #f5f5f5;
-            cursor: not-allowed;
-        }
-    </style>
 </head>
 <body>
-    <h1>Cadastro de Alunos</h1>
+    <h1>Cadastro de Professores</h1>
 
-    <form th:action="@{/alunos/salvar}" th:object="${aluno}" method="post">
+    <form th:action="@{/professores/salvar}" th:object="${professor}" method="post">
         <input type="hidden" name="idPessoa" th:field="*{idPessoa}" readonly />
  
         <label for="nomePessoa">Nome:</label>
-        <input type="text" name="nomePessoa" th:field="*{nomePessoa}" required />
+        <input type="text" id="nomePessoa" name="nomePessoa" th:field="*{nomePessoa}" required />
         <br />
-        
-        <label for="telefoneAluno">Telefone:</label>
-        <input type="text" name="telefoneAluno" th:field="*{telefoneAluno}" />
+
+        <label for="telefoneProfessor">Telefone:</label>
+        <input type="text" id="telefoneProfessor" name="telefoneProfessor" th:field="*{telefoneProfessor}" />
         <br />
-        
-        <label for="enderecoAluno">Endereço:</label>
-        <input type="text" name="enderecoAluno" th:field="*{enderecoAluno}" />
+
+        <label for="dataAdmissao">Data Admissão:</label>
+        <input type="text" id="dataAdmissao" name="dataAdmissao" th:field="*{dataAdmissao}" />
         <br />
-        
-        <label for="rmAluno">RM:</label>
-        <input type="text" name="rmAluno" th:field="*{rmAluno}" />
+
+        <label for="formacao">Formação:</label>
+        <input type="text" id="formacao" name="formacao" th:field="*{formacao}" />
         <br />
-        
-        <label for="cpfAluno">CPF:</label>
-        <input type="text" name="cpfAluno" th:field="*{cpfAluno}" />
+
+        <label for="cpfProfessor">CPF:</label>
+        <input type="text" id="cpfProfessor" name="cpfProfessor" th:field="*{cpfProfessor}" />
         <br />
-        
-        <label for="curso">Curso:</label>
-        <select id="curso" th:field="*{curso}" required>
-            <option value="">Selecione um curso</option>
-            <option th:each="curso : ${cursos}"
-                    th:text="${curso.nomeCurso}"
-                    th:value="${curso.idCurso}"></option>
+
+        <label for="status">Status:</label>
+        <select name="status" id="status" th:field="*{status}" required>
+            <option value="">Selecione um status</option>
+            <option value="ATIVO" th:selected="${professor.status == 'ATIVO'}">ATIVO</option>
+            <option value="INATIVO" th:selected="${professor.status == 'INATIVO'}">INATIVO</option>
+            <option value="LICENÇA" th:selected="${professor.status == 'LICENÇA'}">LICENÇA</option>
         </select>
         <br />
 
@@ -73,9 +58,9 @@
 
         <!-- Campos ocultos que serão enviados no formulário -->
         <input type="hidden" name="cidade.idCidade" id="cidadeIdSelecionada" 
-               th:value="${aluno.cidade != null ? aluno.cidade.idCidade : ''}" />
+               th:value="${professor.cidade != null ? professor.cidade.idCidade : ''}" />
         <input type="hidden" name="cidade.nomeCidade" id="cidadeNomeSelecionada" 
-               th:value="${aluno.cidade != null ? aluno.cidade.nomeCidade : ''}" />
+               th:value="${professor.cidade != null ? professor.cidade.nomeCidade : ''}" />
 
         <button type="submit">Salvar</button>
     </form>
@@ -92,8 +77,8 @@
 
         // Pega os dados da cidade atual (quando está editando)
         const cidadeAtual = {
-            id: /*[[${aluno.cidade != null ? aluno.cidade.idCidade : null}]]*/ null,
-            nome: /*[[${aluno.cidade != null ? aluno.cidade.nomeCidade : ''}]]*/ ''
+            id: /*[[${professor.cidade != null ? professor.cidade.idCidade : null}]]*/ null,
+            nome: /*[[${professor.cidade != null ? professor.cidade.nomeCidade : ''}]]*/ ''
         };
 
         // Carrega todos os estados do Brasil

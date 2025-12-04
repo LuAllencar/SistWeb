@@ -15,11 +15,20 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Cidade {
     
-    // MUDANÇA IMPORTANTE: Integer -> Long
-    // Os IDs do IBGE são números grandes (ex: 3550308 para São Paulo)
+    // ID do IBGE (ex: 3550308 para São Paulo)
     @Id
     private Long idCidade;
     
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 100)
     private String nomeCidade;
+    
+    // Informações do Estado
+    @Column
+    private Long estadoId;
+    
+    @Column(length = 100)
+    private String estadoNome;
+    
+    @Column(length = 2)
+    private String estadoSigla;
 }

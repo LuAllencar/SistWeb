@@ -16,19 +16,22 @@
         <input type="hidden" name="idCurso" th:field="*{idCurso}" readonly />
 
         <label for="nomeCurso">Nome:</label>
-        <input type="text" name="nomeCurso" th:field="*{nomeCurso}"/>
+        <input type="text" id="nomeCurso" name="nomeCurso" th:field="*{nomeCurso}"/>
         <br />
+
         <label for="siglaCurso">Sigla:</label>
-        <input type="text" name="siglaCurso" th:field="*{siglaCurso}" />
+        <input type="text" id="siglaCurso" name="siglaCurso" th:field="*{siglaCurso}" />
         <br />
+
         <label for="chCurso">Carga Horária:</label>
-        <input type="text" name="chCurso" th:field="*{chCurso}" />
+        <input type="text" id="chCurso" name="chCurso" th:field="*{chCurso}" />
         <br />
+
         <label for="periodoCurso">Período:</label>
-        <input type="text" name="periodoCurso" th:field="*{periodoCurso}" />
+        <input type="text" id="periodoCurso" name="periodoCurso" th:field="*{periodoCurso}" />
         <br />
         <button type="submit">Salvar</button>
     </form>
-    <a href="/escola">Voltar</a>
+    <a href="/listarCurso">Voltar</a>
 </body>
 </html>

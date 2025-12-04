@@ -8,6 +8,13 @@
 <link rel="stylesheet" href="/css/estilos.css">
 </head>
 <body>
+    <style>
+        botao {
+            margin-top: 15px;
+            display: inline-flex;
+            flex-direction: column;
+        }
+    </style>
     
         <div>
             <h1>Acesso ao sistema</h1>
@@ -18,12 +25,17 @@
                 <label for="password">Senha:</label>
                 <input type="password" id="password" name="password"/>
                 <br>
-                <input type="submit" value="Entrar" class="btn"/>
+                <div class="botao">
+                    <input type="submit" value="Entrar" class="btn"/>
+                    <br>
+                    <a href="/usuarios/criar" class="btn">Cadastrar</a>
+                </div>
+                
             </form>
             <p th:if="${param.error}">Usuário ou senha inválidos.</p>
             <p th:if="${param.logout}">Você saiu com sucesso.</p>
 
-            <form action="/escola" method="get">
+            <form action="/home" method="get">
                 <button type="submit">Voltar para home</button>
             </form>
         </div>

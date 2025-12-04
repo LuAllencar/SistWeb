@@ -1,9 +1,6 @@
 package br.com.projetoescola.escola.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
@@ -38,4 +35,5 @@ public class Aluno extends Pessoa{
     @ManyToOne
     @JoinColumn(name="idCidade_fk")
     private Cidade cidade;
+
 }

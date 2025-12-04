@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Professores</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1 style="text-align: center;">Lista de Professores</h1>
+    <h3 style="text-align: center;"><a href="/professores/criar">Cadastrar Novo Professor</a></h3>
+
+    <!-- Tabela para exibir os professores cadastrados -->
+    <table style="margin: 0 auto; border: 1px solid black; border-collapse: collapse;">
+        <tr>
+            <td colspan="10" style="text-align: center;">Lista de Professores</td>
+        </tr>
+        <tr>
+            <th>#</th>
+            <th>Nome</th>
+            <th>CPF</th>
+            <th>Telefone</th>
+            <th>Data Admissão</th>
+            <th>Formação</th>
+            <th>Status</th>
+            <th>Cidade</th>
+            <th colspan="2">Ações</th>
+        </tr>
+        <tr th:each="professor : ${professores}">
+            <td th:text="${professor.idPessoa}"></td>
+            <td th:text="${professor.nomePessoa}"></td>
+            <td th:text="${professor.cpfProfessor}"></td>
+            <td th:text="${professor.telefoneProfessor}"></td>
+            <td th:text="${#temporals.format(professor.dataAdmissao, 'dd/MM/yyyy')}"></td>
+            <td th:text="${professor.formacao}"></td>
+            <td>
+                <span th:if="${professor.status == 'ATIVO'}" 
+                      style="color: #10b981; font-weight: 600;">●</span>
+                <span th:if="${professor.status == 'INATIVO'}" 
+                      style="color: #ef4444; font-weight: 600;">●</span>
+                <span th:if="${professor.status == 'LICENÇA'}" 
+                      style="color: #f59e0b; font-weight: 600;">●</span>
+                <span th:text="${professor.status}"></span>
+            </td>
+            <td th:text="${professor.cidade.nomeCidade}"></td>
+            <td>
+                <a th:href="@{/professores/editar/{id}(id=${professor.idPessoa})}">Editar</a>
+                <a th:href="@{/professores/excluir/{id}(id=${professor.idPessoa})}" 
+                   onclick="return confirm('Tem certeza que deseja excluir este professor?')">Excluir</a>
+            </td>
+        </tr>
+    </table>
+    
+    <a href="/home">Voltar</a>
+</body>
+</html>
